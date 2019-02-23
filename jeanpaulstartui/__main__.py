@@ -4,7 +4,8 @@ import logging
 import getpass
 import argparse
 import pkg_resources
-from PySide.QtGui import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
 from jeanpaulstartui import ROOT
 from jeanpaulstartui.launcher import Launcher
 
@@ -16,14 +17,14 @@ class ReadableDirectory(argparse.Action):
 
         for directory in directories:
             if not os.path.isdir(directory):
-                logging.warn('ReadableDirectory:{0} is not a valid path'.format(directory))
+                logging.warning('ReadableDirectory:{0} is not a valid path'.format(directory))
                 continue
 
             if os.access(directory, os.R_OK):
                 valid_directories.append(directory)
 
             else:
-                logging.warn('ReadableDirectory:{0} is not a valid path'.format(directory))
+                logging.warning('ReadableDirectory:{0} is not a valid path'.format(directory))
 
         setattr(namespace, self.dest, valid_directories)
 

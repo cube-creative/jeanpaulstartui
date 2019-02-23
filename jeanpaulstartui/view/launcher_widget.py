@@ -1,8 +1,9 @@
 import os
 import sys
 import logging
-from PySide.QtGui import *
-from PySide.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtCore import *
+from PySide2.QtWidgets import *
 
 from jeanpaulstartui import ROOT
 from jeanpaulstartui.view.flow_layout import FlowLayout
@@ -24,20 +25,20 @@ class LauncherWidget(QWidget):
         self.window_icon = QIcon(ROOT + '/resources/ceci-n-est-pas-une-icone.png')
 
         self.settings = QSettings('CubeCreative', 'JeanPaulStart')
-        self.restoreGeometry(self.settings.value('geometry', ''))
+        self.restoreGeometry(self.settings.value('geometry', b''))
 
         self.setMouseTracking(True)
         self.setObjectName('LauncherWidget')
         self.setWindowTitle('Jean-Paul Start')
         self.setWindowIcon(self.window_icon)
         self.setMinimumSize(376, 144)
-        self.setWindowFlags(
-            Qt.CustomizeWindowHint |
-            Qt.Dialog |
-            Qt.WindowCloseButtonHint |
-            Qt.WindowMinimizeButtonHint |
-            Qt.WindowSystemMenuHint
-        )
+        #self.setWindowFlags(
+        #    Qt.CustomizeWindowHint |
+        #    Qt.Dialog |
+        #    Qt.WindowCloseButtonHint |
+        #    Qt.WindowMinimizeButtonHint |
+        #    Qt.WindowSystemMenuHint
+        #)
 
         batches_widget = QWidget()
         self.batches_layout = FlowLayout(parent=batches_widget, spacing=0)
@@ -136,7 +137,7 @@ class LauncherWidget(QWidget):
             image = QImage(image_path)
         else:
             image = QImage(2, 2, QImage.Format_RGB16)
-            logging.warn("Impossible to find " + image_path)
+            logging.warning("Impossible to find " + image_path)
         button_icon.setPixmap(QPixmap.fromImage(image.scaled(
             48,
             48,

@@ -5,5 +5,9 @@ __pycache__/
 /.idea
 .coverage
 
-
 Thumbs.db
+.DS_Store
+
+build/
+dist/
+jeanpaulstartui.egg-info/
