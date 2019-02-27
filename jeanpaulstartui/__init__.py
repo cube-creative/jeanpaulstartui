@@ -1,5 +1,5 @@
 import os
-import getpass
+import getpass, logging
 import argparse
 import pkg_resources
 
