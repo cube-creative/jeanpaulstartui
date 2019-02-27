@@ -20,7 +20,6 @@ class LauncherWidget(QWidget):
     def __init__(self, parent=None, tray=True):
         QWidget.__init__(self, parent=parent)
 
-        self.tray_enabled = tray
         self.mouse_pressed = False
         self.offset = QCursor()
         self.window_icon = QIcon(ROOT + '/resources/ceci-n-est-pas-une-icone.png')
@@ -62,11 +61,13 @@ class LauncherWidget(QWidget):
 
         self.controller = None
 
-        self.tray = QSystemTrayIcon()
-        self.tray.setIcon(self.window_icon)
-        self.tray.setToolTip('Jean-Paul Start')
-        self.tray.setVisible(self.tray_enabled)
-        self.tray.activated.connect(self.showNormalReason)
+        self.tray = None
+        if tray:
+            self.tray = QSystemTrayIcon()
+            self.tray.setIcon(self.window_icon)
+            self.tray.setToolTip('Jean-Paul Start')
+            self.tray.setVisible(self.tray_enabled)
+            self.tray.activated.connect(self.showNormalReason)
 
         menu = QMenu()
         self.version_menu = menu.addAction('')
@@ -79,7 +80,8 @@ class LauncherWidget(QWidget):
         menu.addSeparator()
         exit_action = menu.addAction("Exit")
         exit_action.triggered.connect(sys.exit)
-        self.tray.setContextMenu(menu)
+        if self.tray:
+            self.tray.setContextMenu(menu)
 
     def refresh(self):
         QApplication.processEvents()
@@ -97,11 +99,12 @@ class LauncherWidget(QWidget):
         self.status_progress_bar.set_progress(value)
 
     def set_version(self, version):
-        self.version_menu.setText(version)
+        if self.tray:
+            self.version_menu.setText(version)
         self.set_status_message(version)
 
     def show(self):
-        if self.tray_enabled:
+        if self.tray:
             self.tray.show()
         return QWidget.show(self)
 
