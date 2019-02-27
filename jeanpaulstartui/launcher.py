@@ -9,8 +9,8 @@ def _error_as_status(executor):
 
 class Launcher(object):
 
-    def __init__(self):
-        self._view = LauncherWidget()
+    def __init__(self, tray=True):
+        self._view = LauncherWidget(tray=tray)
         self._view.controller = self
         self.batch_directories = list()
         self.tags_filepath = None

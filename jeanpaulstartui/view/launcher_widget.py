@@ -17,9 +17,10 @@ def _clear_layout(layout):
 
 class LauncherWidget(QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, tray=True):
         QWidget.__init__(self, parent=parent)
 
+        self.tray_enabled = tray
         self.mouse_pressed = False
         self.offset = QCursor()
         self.window_icon = QIcon(ROOT + '/resources/ceci-n-est-pas-une-icone.png')
@@ -64,7 +65,7 @@ class LauncherWidget(QWidget):
         self.tray = QSystemTrayIcon()
         self.tray.setIcon(self.window_icon)
         self.tray.setToolTip('Jean-Paul Start')
-        self.tray.setVisible(True)
+        self.tray.setVisible(self.tray_enabled)
         self.tray.activated.connect(self.showNormalReason)
 
         menu = QMenu()
@@ -100,7 +101,8 @@ class LauncherWidget(QWidget):
         self.set_status_message(version)
 
     def show(self):
-        self.tray.show()
+        if self.tray_enabled:
+            self.tray.show()
         return QWidget.show(self)
 
     def showNormal(self):

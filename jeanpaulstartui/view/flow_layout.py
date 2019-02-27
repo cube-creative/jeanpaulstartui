@@ -74,10 +74,10 @@ class FlowLayout(QLayout):
 
         for item in self.item_list:
             widget = item.widget()
-            space_x = self.spacing() + widget.style().layoutSpacing(QSizePolicy.PushButton,
-                                                                    QSizePolicy.PushButton, Qt.Horizontal)
-            space_y = self.spacing() + widget.style().layoutSpacing(QSizePolicy.PushButton,
-                                                                    QSizePolicy.PushButton, Qt.Vertical) + 1
+            space_x = self.spacing()# + widget.style().layoutSpacing(QSizePolicy.PushButton,
+                                    #                                QSizePolicy.PushButton, Qt.Horizontal)
+            space_y = self.spacing()# + widget.style().layoutSpacing(QSizePolicy.PushButton,
+                                    #                                QSizePolicy.PushButton, Qt.Vertical) + 1
             next_x = x + item.sizeHint().width() + space_x
             if next_x - space_x > rect.right() and line_height > 0:
                 x = rect.x()
