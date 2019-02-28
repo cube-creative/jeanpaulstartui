@@ -17,21 +17,26 @@ def _clear_layout(layout):
 
 class LauncherWidget(QWidget):
 
-    def __init__(self, parent=None, tray=True):
+    def __init__(self, parent=None, width=None, height=None, title=None, tray=True):
         QWidget.__init__(self, parent=parent)
+
+        title = (title if title else 'Jean-Paul Start')
+        width = (width if width else 376)
+        height = (height if height else 144)
 
         self.mouse_pressed = False
         self.offset = QCursor()
         self.window_icon = QIcon(ROOT + '/resources/ceci-n-est-pas-une-icone.png')
 
-        self.settings = QSettings('CubeCreative', 'JeanPaulStart')
+        self.settings = QSettings('CubeCreative', title)
         self.restoreGeometry(self.settings.value('geometry', b''))
 
         self.setMouseTracking(True)
         self.setObjectName('LauncherWidget')
-        self.setWindowTitle('Jean-Paul Start')
+        self.setWindowTitle(title)
         self.setWindowIcon(self.window_icon)
-        self.setMinimumSize(376, 144)
+        self.resize(width, height)
+        #self.setMinimumSize(width, height)
         #self.setWindowFlags(
         #    Qt.CustomizeWindowHint |
         #    Qt.Dialog |
@@ -52,7 +57,7 @@ class LauncherWidget(QWidget):
 
         self.status_progress_bar = ProgressLabel()
         self.status_progress_bar.setFixedHeight(15)
-        self.status_progress_bar.setObjectName("status")
+        self.status_progress_bar.setObjectName('status')
 
         self.main_layout = QVBoxLayout(self)
         self.main_layout.addWidget(self.scroll_area)
@@ -65,7 +70,7 @@ class LauncherWidget(QWidget):
         if tray:
             self.tray = QSystemTrayIcon()
             self.tray.setIcon(self.window_icon)
-            self.tray.setToolTip('Jean-Paul Start')
+            self.tray.setToolTip(title)
             self.tray.setVisible(self.tray_enabled)
             self.tray.activated.connect(self.showNormalReason)
 
@@ -73,12 +78,12 @@ class LauncherWidget(QWidget):
         self.version_menu = menu.addAction('')
         self.version_menu.setDisabled(True)
         menu.addSeparator()
-        open_action = menu.addAction("Open Jean-Paul Start")
+        open_action = menu.addAction('Open ' + title)
         open_action.triggered.connect(self.showNormal)
-        reload_action = menu.addAction("Reload batches")
+        reload_action = menu.addAction('Reload batches')
         reload_action.triggered.connect(self.reload_batches)
         menu.addSeparator()
-        exit_action = menu.addAction("Exit")
+        exit_action = menu.addAction('Exit')
         exit_action.triggered.connect(sys.exit)
         if self.tray:
             self.tray.setContextMenu(menu)
@@ -142,7 +147,7 @@ class LauncherWidget(QWidget):
             image = QImage(image_path)
         else:
             image = QImage(2, 2, QImage.Format_RGB16)
-            logging.warning("Impossible to find " + image_path)
+            logging.warning('Impossible to find ' + image_path)
         button_icon.setPixmap(QPixmap.fromImage(image.scaled(
             48,
             48,

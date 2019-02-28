@@ -67,7 +67,7 @@ def process_args(args=None):
     return parse_args
 
 
-def launch_widget(args=None, tray=True):
+def launch_widget(args=None, width=None, height=None, title=None, tray=True):
     args = process_args(args)
 
     try:
@@ -75,7 +75,7 @@ def launch_widget(args=None, tray=True):
     except pkg_resources.DistributionNotFound:
         version = 'Not installed with pip'
 
-    launcher = Launcher(tray=tray)
+    launcher = Launcher(width=width, height=height, title=title, tray=tray)
     launcher.batch_directories = args.batches
     launcher.tags_filepath = args.tags
     launcher.username = args.username
