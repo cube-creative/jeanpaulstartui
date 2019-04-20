@@ -71,7 +71,6 @@ class LauncherWidget(QWidget):
             self.tray = QSystemTrayIcon()
             self.tray.setIcon(self.window_icon)
             self.tray.setToolTip(title)
-            self.tray.setVisible(self.tray_enabled)
             self.tray.activated.connect(self.showNormalReason)
 
         menu = QMenu()
