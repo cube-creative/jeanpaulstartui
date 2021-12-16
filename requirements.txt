@@ -1,2 +1,2 @@
-jeanpaulstart
-PySide
+jeanpaulstart @ git+https://github.com/cube-creative/jeanpaulstart.git@master#egg=jeanpaulstart
+Qt5.py

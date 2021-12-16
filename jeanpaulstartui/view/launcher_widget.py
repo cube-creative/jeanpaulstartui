@@ -1,8 +1,7 @@
 import os
 import sys
 import logging
-from PySide.QtGui import *
-from PySide.QtCore import *
+from Qt5 import QtWidgets, QtCore, QtGui
 
 from jeanpaulstartui import ROOT
 from jeanpaulstartui.view.flow_layout import FlowLayout
@@ -14,17 +13,21 @@ def _clear_layout(layout):
         layout.itemAt(i).widget().deleteLater()
 
 
-class LauncherWidget(QWidget):
+class LauncherWidget(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
-        QWidget.__init__(self, parent=parent)
+        super(LauncherWidget, self).__init__(parent=parent)
 
         self.mouse_pressed = False
-        self.offset = QCursor()
-        self.window_icon = QIcon(ROOT + '/resources/ceci-n-est-pas-une-icone.png')
+        self.offset = QtGui.QCursor()
+        self.window_icon = QtGui.QIcon(ROOT + '/resources/ceci-n-est-pas-une-icone.png')
 
-        self.settings = QSettings('CubeCreative', 'JeanPaulStart')
-        self.restoreGeometry(self.settings.value('geometry', ''))
+        self.settings = QtCore.QSettings('CubeCreative', 'JeanPaulStart')
+        
+        geometry = self.settings.value('geometry', '')
+        if not isinstance(geometry, QtCore.QByteArray):
+            geometry.encode("utf-8")
+        self.restoreGeometry(geometry)
 
         self.setMouseTracking(True)
         self.setObjectName('LauncherWidget')
@@ -32,20 +35,20 @@ class LauncherWidget(QWidget):
         self.setWindowIcon(self.window_icon)
         self.setMinimumSize(376, 144)
         self.setWindowFlags(
-            Qt.CustomizeWindowHint |
-            Qt.Dialog |
-            Qt.WindowCloseButtonHint |
-            Qt.WindowMinimizeButtonHint |
-            Qt.WindowSystemMenuHint
+            QtCore.Qt.CustomizeWindowHint |
+            QtCore.Qt.Dialog |
+            QtCore.Qt.WindowCloseButtonHint |
+            QtCore.Qt.WindowMinimizeButtonHint |
+            QtCore.Qt.WindowSystemMenuHint
         )
 
-        batches_widget = QWidget()
+        batches_widget = QtWidgets.QWidget()
         self.batches_layout = FlowLayout(parent=batches_widget, spacing=0)
         batches_widget.setLayout(self.batches_layout)
         batches_widget.setContentsMargins(16, 16, 16, 16)
         self.batches_layout.setSpacing(16)
 
-        self.scroll_area = QScrollArea()
+        self.scroll_area = QtWidgets.QScrollArea()
         self.scroll_area.setWidget(batches_widget)
         self.scroll_area.setWidgetResizable(True)
 
@@ -53,20 +56,20 @@ class LauncherWidget(QWidget):
         self.status_progress_bar.setFixedHeight(15)
         self.status_progress_bar.setObjectName("status")
 
-        self.main_layout = QVBoxLayout(self)
+        self.main_layout = QtWidgets.QVBoxLayout(self)
         self.main_layout.addWidget(self.scroll_area)
         self.main_layout.addWidget(self.status_progress_bar)
         self.main_layout.setContentsMargins(8, 8, 8, 8)
 
         self.controller = None
 
-        self.tray = QSystemTrayIcon()
+        self.tray = QtWidgets.QSystemTrayIcon()
         self.tray.setIcon(self.window_icon)
         self.tray.setToolTip('Jean-Paul Start')
         self.tray.setVisible(True)
         self.tray.activated.connect(self.showNormalReason)
 
-        menu = QMenu()
+        menu = QtWidgets.QMenu()
         self.version_menu = menu.addAction('')
         self.version_menu.setDisabled(True)
         menu.addSeparator()
@@ -80,13 +83,13 @@ class LauncherWidget(QWidget):
         self.tray.setContextMenu(menu)
 
     def refresh(self):
-        QApplication.processEvents()
+        QtWidgets.QApplication.processEvents()
 
     def set_hourglass(self, is_hourglass):
         if is_hourglass:
-            QApplication.setOverrideCursor(Qt.WaitCursor)
+            QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         else:
-            QApplication.restoreOverrideCursor()
+            QtWidgets.QApplication.restoreOverrideCursor()
 
     def set_status_message(self, message):
         self.status_progress_bar.setText(message)
@@ -100,26 +103,26 @@ class LauncherWidget(QWidget):
 
     def show(self):
         self.tray.show()
-        return QWidget.show(self)
+        return super(LauncherWidget, self).show()
 
     def showNormal(self):
         self.activateWindow()
-        return QWidget.showNormal(self)
+        return super(LauncherWidget, self).showNormal()
 
     def showNormalReason(self, reason):
-        if reason == QSystemTrayIcon.Trigger:
+        if reason == QtWidgets.QSystemTrayIcon.Trigger:
             self.showNormal()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_F5:
             self.reload_batches()
-        QWidget.keyPressEvent(self, event)
+        super(LauncherWidget, self).keyPressEvent(event)
 
     def reload_batches(self):
         self.showNormal()
-        QApplication.setOverrideCursor(Qt.BusyCursor)
+        QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.BusyCursor)
         self.controller.update()
-        QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
     def populate_layout(self, batches):
         _clear_layout(self.batches_layout)
@@ -128,37 +131,37 @@ class LauncherWidget(QWidget):
             self.batches_layout.addWidget(batch_button)
 
     def _make_batch_button(self, batch):
-        button = QPushButton(self)
-        button_icon = QLabel()
+        button = QtWidgets.QPushButton(self)
+        button_icon = QtWidgets.QLabel()
 
         image_path = os.path.expandvars(batch.icon_path)
         if os.path.isfile(image_path):
-            image = QImage(image_path)
+            image = QtGui.QImage(image_path)
         else:
-            image = QImage(2, 2, QImage.Format_RGB16)
+            image = QtGui.QImage(2, 2, QtGui.QImage.Format_RGB16)
             logging.warn("Impossible to find " + image_path)
-        button_icon.setPixmap(QPixmap.fromImage(image.scaled(
+        button_icon.setPixmap(QtGui.QPixmap.fromImage(image.scaled(
             48,
             48,
-            Qt.KeepAspectRatioByExpanding,
-            Qt.SmoothTransformation
+            QtCore.Qt.KeepAspectRatioByExpanding,
+            QtCore.Qt.SmoothTransformation
         )))
 
-        button_icon.setAlignment(Qt.AlignCenter)
-        button_icon.setTextInteractionFlags(Qt.NoTextInteraction)
+        button_icon.setAlignment(QtCore.Qt.AlignCenter)
+        button_icon.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         button_icon.setMouseTracking(False)
-        button_icon.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        button_icon.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         button_icon.setContentsMargins(0, 8, 0, 0)
 
         batch_name = batch.name
-        button_text = QLabel(batch_name)
-        button_text.setAlignment(Qt.AlignCenter | Qt.AlignBottom)
+        button_text = QtWidgets.QLabel(batch_name)
+        button_text.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignBottom)
         button_text.setWordWrap(True)
-        button_text.setTextInteractionFlags(Qt.NoTextInteraction)
+        button_text.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         button_text.setMouseTracking(False)
-        button_text.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        button_text.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
-        button_layout = QVBoxLayout()
+        button_layout = QtWidgets.QVBoxLayout()
         button_layout.addWidget(button_icon)
         button_layout.addWidget(button_text)
         button_layout.setSpacing(0)
@@ -169,7 +172,7 @@ class LauncherWidget(QWidget):
         button.setFixedSize(96, 96)
         button.setObjectName(batch.name + '_button')
         button.setLayout(button_layout)
-        button.setCursor(QCursor(Qt.PointingHandCursor))
+        button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
 
         button.batch = batch
         button.clicked.connect(self._batch_clicked)
