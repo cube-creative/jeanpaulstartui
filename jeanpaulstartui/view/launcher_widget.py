@@ -26,7 +26,7 @@ class LauncherWidget(QtWidgets.QWidget):
         
         geometry = self.settings.value('geometry', '')
         if not isinstance(geometry, QtCore.QByteArray):
-            geometry.encode("utf-8")
+            geometry = QtCore.QByteArray(geometry.encode("utf-8"))
         self.restoreGeometry(geometry)
 
         self.setMouseTracking(True)
