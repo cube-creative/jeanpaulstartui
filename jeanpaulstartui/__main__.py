@@ -4,7 +4,7 @@ import logging
 import getpass
 import argparse
 import pkg_resources
-from PySide.QtGui import *
+from Qt5 import QtWidgets
 from jeanpaulstartui import ROOT
 from jeanpaulstartui.launcher import Launcher
 
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     except pkg_resources.DistributionNotFound:
         version = 'Not installed with pip'
 
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     with open(ROOT + '/resources/stylesheet.css', 'r') as f_stylesheet:
         stylesheet = str(f_stylesheet.read())
     app.setStyleSheet(stylesheet)
