@@ -1,2 +1,2 @@
-jeanpaulstart @ git+https://github.com/Arubinu/jeanpaulstart.git@master#egg=jeanpaulstart
+jeanpaulstart @ git+https://github.com/Arubinu/jeanpaulstart.git@master
 Qt5.py
