@@ -1,2 +1,2 @@
-jeanpaulstart
-PySide
+jeanpaulstart @ git+https://github.com/Arubinu/jeanpaulstart.git@master
+Qt5.py

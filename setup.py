@@ -24,10 +24,10 @@ else:
 
 if path.isfile(_requirements_filepath):
     with open(_requirements_filepath) as requirements_file:
-        _requirements = requirements_file.readlines()
+        _requirements = [r.strip() for r in requirements_file.readlines()]
 else:
     _requirements = list()
-
+print(_requirements)
 
 setup(
     name=NAME,
@@ -38,5 +38,9 @@ setup(
     author_email=AUTHOR_EMAIL,
     packages=find_packages(exclude=['tests']),
     install_requires=_requirements,
+    extras_require={
+        "PySide2": ["PySide2"],
+        "PyQt5": ["PyQt5"]
+    },
     include_package_data=True
 )

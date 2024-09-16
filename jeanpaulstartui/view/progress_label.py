@@ -1,22 +1,21 @@
-from PySide.QtGui import *
-from PySide.QtCore import Qt
+from Qt5 import QtCore, QtWidgets, QtGui
 
 
-class ProgressLabel(QLabel):
+class ProgressLabel(QtWidgets.QLabel):
 
     def __init__(self, parent=None):
-        QLabel.__init__(self, parent=parent)
+        super(ProgressLabel, self).__init__(parent=parent)
         self._progress = 0.0
 
     def set_progress(self, value):
         self._progress = value
 
     def paintEvent(self, event):
-        painter = QPainter()
+        painter = QtGui.QPainter()
         painter.begin(self)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(QColor(61, 174, 233))
+        painter.setPen(QtCore.Qt.NoPen)
+        painter.setBrush(QtGui.QColor(61, 174, 233))
         painter.drawRect(event.rect().adjusted(0, 13, -self.width()*(1 - self._progress), 0))
         painter.end()
 
-        QLabel.paintEvent(self, event)
+        super(ProgressLabel, self).paintEvent(event)
