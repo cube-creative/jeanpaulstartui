@@ -108,3 +108,10 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     width: 0px;
     height: 0px;
 }
+
+QPushButton::menu-indicator  {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    top: -48px;
+}
+

@@ -1,5 +1,6 @@
-from PySide.QtGui import *
-from PySide.QtCore import Qt
+from PySide6.QtGui import *
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import *
 
 
 class ProgressLabel(QLabel):

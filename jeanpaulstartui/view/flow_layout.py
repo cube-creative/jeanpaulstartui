@@ -1,6 +1,5 @@
-from PySide.QtCore import *
-from PySide.QtGui import *
-
+from PySide6.QtWidgets import *
+from PySide6.QtCore import *
 
 """
 Flow Layout from
@@ -58,11 +57,6 @@ class FlowLayout(QLayout):
         return self.minimumSize()
 
     def minimumSize(self):
-        # size = QSize()
-
-        # for item in self.item_list:
-        #    size = size.expandedTo(item.minimumSize())
-        # size = size + QSize(2 * self.contentsMargins().top(), 2 * self.contentsMargins().top())
         size = QSize(2 * self.contentsMargins().top(), 2 * self.contentsMargins().top())
         return size
 
